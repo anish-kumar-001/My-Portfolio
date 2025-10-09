@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  portfolio-site:
+    # Build the image using the Dockerfile in the current directory
+    build: .
+    container_name: anish-portfolio
+    # Map container port 80 to host port 8080 (You can access it at http://localhost:8080)
+    ports:
+      - "8080:80"
+    # Restart the container if it stops for any reason
+    restart: always
