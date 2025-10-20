@@ -1,41 +1,38 @@
-# This workflow is triggered on every push to the main branch
+# .github/workflows/deploy.yml
 name: Deploy Portfolio to GitHub Pages
 
 on:
   push:
     branches:
       - main
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Grant GITHUB_TOKEN write permission to content for GitHub Pages to work
 permissions:
   contents: write
 
 jobs:
-  # Single job to build and deploy the site
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the source code from your main branch
-      - name: Checkout code
+      - name: Checkout code 
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js (required by the deployment action)
-      - name: Set up Node
+      - name: Set up Node 
         uses: actions/setup-node@v4
         with:
-          node-version: '20' 
+          node-version: '20'
+          cache: 'npm'
 
-      # Step 3: Deployment action
-      # This action takes the content of the repository, pushes it to the gh-pages branch,
-      # and ensures GitHub Pages publishes from there.
-      - name: Deploy to GitHub Pages
+      - name: Install dependencies 
+        run: npm install
+
+      - name: Build React App 
+        run: npm run build
+
+      - name: Deploy to GitHub Pages 
         uses: peaceiris/actions-gh-pages@v3
         with:
-          # Use the default GitHub token with 'write' permission
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # The source directory to publish (our static index.html is at the root)
-          publish_dir: ./
-          # Force push to the gh-pages branch (standard practice for static sites)
+          publish_dir: ./build
+          publish_branch: gh-pages
           force_orphan: true
