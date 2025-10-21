@@ -15,7 +15,7 @@ const Projects = () => {
           <a href="https://github.com/anish-kumar-001/Docker-Monitoring-Stack-Project.git" target="_blank" className="block transform transition duration-300 hover:scale-[1.01]">
               <div className="card-pop p-8 rounded-xl shadow-2xl border border-slate-700 flex flex-col h-full hover:ring-2" style={{borderColor: 'var(--color-primary)'}}>
                   <h4 className="text-2xl font-semibold mb-3" style={{color: 'var(--color-primary)'}}>
-                    📊 Monitoring Stack (P/G)
+                    📊 Monitoring Stack 
                   </h4>
                   <p className="text-base text-slate-400 flex-grow">
                       DevOps project providing **end-to-end observability** using **Prometheus** and **Grafana** deployed via Docker Compose on AWS EC2.
@@ -55,7 +55,7 @@ const Projects = () => {
           <a href="https://github.com/anish-kumar-001/My-Portfolio" target="_blank" className="block md:col-span-2 transform transition duration-300 hover:scale-[1.01]">
               <div className="card-pop p-8 rounded-xl shadow-2xl border border-slate-700 flex flex-col h-full hover:ring-2" style={{borderColor: 'var(--color-primary)'}}> 
                   <h4 className="text-2xl font-semibold mb-3" style={{color: 'var(--color-primary)'}}>
-                    🔄 CI/CD Portfolio Pipeline (Meta Project)
+                    🔄 CI/CD Portfolio Pipeline
                   </h4>
                   <p className="text-base text-slate-400 flex-grow">
                       This live site's pipeline is a demonstration of **DevOps automation**: zero-cost, automated deployment using **GitHub Actions** and **GitHub Pages** on every push to the `main` branch. This proves I can ship code reliably.
