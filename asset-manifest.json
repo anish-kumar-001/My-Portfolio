@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/My-Portfolio/static/css/main.064bfab7.css",
+    "main.js": "/My-Portfolio/static/js/main.6059998b.js",
+    "static/media/Anish-kumar-profile.png": "/My-Portfolio/static/media/Anish-kumar-profile.9bdf0942f267b6ca19a3.png",
+    "static/media/anish_kumar_resume.pdf": "/My-Portfolio/static/media/anish_kumar_resume.b171dce686a97fd4ea63.pdf",
+    "index.html": "/My-Portfolio/index.html",
+    "main.064bfab7.css.map": "/My-Portfolio/static/css/main.064bfab7.css.map",
+    "main.6059998b.js.map": "/My-Portfolio/static/js/main.6059998b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.064bfab7.css",
+    "static/js/main.6059998b.js"
+  ]
+}
