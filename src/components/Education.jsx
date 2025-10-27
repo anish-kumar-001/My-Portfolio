@@ -31,7 +31,7 @@ const Education = () => {
 
           <EducationCard 
               title="Master of Computer Applications (MCA)"
-              institution="I.K. Gujral Punjab Technical University (IKPTU)"
+              institution="I.K. Gujral Punjab Technical University (IKGPTU)"
               description="Specialization in Advanced Software Development and IT Infrastructure."
           />
           <EducationCard 

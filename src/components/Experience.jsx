@@ -25,7 +25,7 @@ const Experience = () => {
                   {/* FIX: Set heading color to PRIMARY */}
                   <h4 className="text-2xl font-semibold" style={{color: 'var(--color-primary)'}}>DevOps Engineer</h4>
                   <p className="text-base text-slate-300">ToXSL Technologies</p>
-                  <p className="text-md font-bold text-white mt-2">Sep 2025 - Currently Active</p>
+                  <p className="text-md font-bold text-white mt-2">Sep 2025 - Present</p>
                   <p className="text-base text-slate-400 mt-2">
                       Focused on practical implementation of DevOps methodologies and toolchains, including CI/CD automation, cloud services, and container orchestration.
                   </p>
