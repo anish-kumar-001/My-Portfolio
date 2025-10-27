@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 // Correctly importing assets
 import AnishKumarImage from '../assets/Anish-kumar-profile.png'; 
-import ResumePDF from '../assets/anish_kumar_resume.pdf'; 
+import ResumePDF from '../assets/My_Resume.pdf'; 
 
 const Hero = () => {
   // State to control the visibility of the download confirmation modal
