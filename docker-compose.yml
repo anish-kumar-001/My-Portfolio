@@ -1,30 +1,30 @@
 version: '3.8'
 
 services:
-  # 1. Your React Portfolio Application
   portfolio_app:
     build: . 
     container_name: portfolio_app
     restart: always
     ports:
       - "80:80"
-    # Wait for Prometheus to be ready before starting Grafana
     depends_on:
       - prometheus 
 
-  # 2. Node Exporter (Monitors the host/AWS instance CPU, Memory, Disk)
+  # 2. Node Exporter (Monitors the host) - REMOVED host network mode
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
-    command:
-      - '--path.rootfs=/host'
+    # Removed: network_mode: host
+    # Removed: command: ['--path.rootfs=/host']
+    # Removed: volumes: ['/:/host:ro,rslave']
+    
+    # We will simply monitor the Node Exporter container itself (CPU/Mem of container, which is fine for basic T3 monitoring)
+    # The container will now be on the default Docker network
     restart: always
-    volumes:
-      - /:/host:ro,rslave
-    # CRITICAL: This allows it to monitor the host's metrics
-    network_mode: host 
-
-  # 3. Prometheus Monitoring Server
+    ports:
+      - "9100:9100" # Expose the port so Prometheus (ID 1860) can access the metrics
+    
+  # 3. Prometheus Monitoring Server (UNCHANGED)
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -32,14 +32,12 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      # Load the config you just updated
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml 
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    # The fix in prometheus.yml allows it to scrape the node_exporter on the host network
 
-  # 4. Grafana Visualization Dashboard
+  # 4. Grafana Visualization Dashboard (UNCHANGED)
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -49,13 +47,11 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
-      # Default credentials for first login
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=YourSecurePassword123 
     depends_on:
       - prometheus
 
-# Define Docker volumes for data persistence
 volumes:
   prometheus_data: {}
   grafana_data: {}
