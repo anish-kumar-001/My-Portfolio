@@ -3,19 +3,21 @@ global:
   scrape_interval: 15s 
 
 scrape_configs:
-  # 1. Scrape Prometheus itself
+  # 1. Scrape Prometheus itself (Always works via localhost/loopback)
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
 
-  # 2. Scrape the Node Exporter (for instance health)
+  # 2. Scrape the Node Exporter (Monitors the AWS T3 Host)
   - job_name: 'node_exporter_aws_t3'
-    # 'node_exporter' is the service name defined in docker-compose.yml
+    # FIX: Node Exporter uses host network mode, so Prometheus must access it 
+    # via the host's loopback address (127.0.0.1) from within the container.
     static_configs:
-      - targets: ['node_exporter:9100']
+      - targets: ['127.0.0.1:9100']
       
-  # 3. Scrape the portfolio application (basic HTTP health check)
+  # 3. Scrape the portfolio application (Basic HTTP Health Check)
   - job_name: 'portfolio_site_health'
+    # Specify the root path, as the React site doesn't have a /metrics endpoint
+    metrics_path: / 
     static_configs:
-      # 'portfolio_app' is the service name defined in docker-compose.yml
       - targets: ['portfolio_app:80']

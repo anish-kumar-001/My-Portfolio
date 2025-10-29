@@ -3,24 +3,26 @@ version: '3.8'
 services:
   # 1. Your React Portfolio Application
   portfolio_app:
-    build: . # Build from the Dockerfile in the current directory
+    build: . 
     container_name: portfolio_app
     restart: always
     ports:
-      - "80:80" # Expose your site on the instance's port 80
+      - "80:80"
+    # Wait for Prometheus to be ready before starting Grafana
+    depends_on:
+      - prometheus 
 
   # 2. Node Exporter (Monitors the host/AWS instance CPU, Memory, Disk)
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
-    # Required to access the host's metrics
     command:
       - '--path.rootfs=/host'
     restart: always
     volumes:
       - /:/host:ro,rslave
-    # Node Exporter must use host networking for accurate host metrics
-    network_mode: host
+    # CRITICAL: This allows it to monitor the host's metrics
+    network_mode: host 
 
   # 3. Prometheus Monitoring Server
   prometheus:
@@ -28,18 +30,14 @@ services:
     container_name: prometheus
     restart: always
     ports:
-      - "9090:9090" # Expose the Prometheus Web UI
+      - "9090:9090"
     volumes:
-      # Load the scraping configuration
+      # Load the config you just updated
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml 
-      # Persistent storage for metrics
-      - prometheus_data:/prometheus 
+      - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      # OPTIONAL: You can update this on AWS with your public IP for cleaner links
-      - '--web.external-url=http://localhost:9090' 
-    depends_on:
-      - portfolio_app
+    # The fix in prometheus.yml allows it to scrape the node_exporter on the host network
 
   # 4. Grafana Visualization Dashboard
   grafana:
@@ -47,13 +45,13 @@ services:
     container_name: grafana
     restart: always
     ports:
-      - "3000:3000" # Expose the Grafana Web UI
+      - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana # Persistent storage for dashboards
+      - grafana_data:/var/lib/grafana
     environment:
-      # *** YOU MUST CHANGE THIS PASSWORD BEFORE DEPLOYING ***
+      # Default credentials for first login
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=YourSecurePassword123
+      - GF_SECURITY_ADMIN_PASSWORD=YourSecurePassword123 
     depends_on:
       - prometheus
 
