@@ -1,0 +1,21 @@
+global:
+  # Scrape every 15 seconds
+  scrape_interval: 15s 
+
+scrape_configs:
+  # 1. Scrape Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # 2. Scrape the Node Exporter (for instance health)
+  - job_name: 'node_exporter_aws_t3'
+    # 'node_exporter' is the service name defined in docker-compose.yml
+    static_configs:
+      - targets: ['node_exporter:9100']
+      
+  # 3. Scrape the portfolio application (basic HTTP health check)
+  - job_name: 'portfolio_site_health'
+    static_configs:
+      # 'portfolio_app' is the service name defined in docker-compose.yml
+      - targets: ['portfolio_app:80']
