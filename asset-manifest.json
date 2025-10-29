@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "https://anish-kumar-001.github.io/My-Portfolio/static/css/main.064bfab7.css",
+    "main.js": "https://anish-kumar-001.github.io/My-Portfolio/static/js/main.66a59568.js",
+    "static/media/Anish-kumar-profile.png": "https://anish-kumar-001.github.io/My-Portfolio/static/media/Anish-kumar-profile.9bdf0942f267b6ca19a3.png",
+    "static/media/My_Resume.pdf": "https://anish-kumar-001.github.io/My-Portfolio/static/media/My_Resume.564d0c04b4b88c7102c7.pdf",
+    "index.html": "https://anish-kumar-001.github.io/My-Portfolio/index.html",
+    "main.064bfab7.css.map": "https://anish-kumar-001.github.io/My-Portfolio/static/css/main.064bfab7.css.map",
+    "main.66a59568.js.map": "https://anish-kumar-001.github.io/My-Portfolio/static/js/main.66a59568.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.064bfab7.css",
+    "static/js/main.66a59568.js"
+  ]
+}
