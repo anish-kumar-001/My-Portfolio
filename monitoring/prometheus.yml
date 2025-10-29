@@ -7,7 +7,7 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # 2. Scrape the Node Exporter (System Monitoring)
+  # 2. Scrape the Node Exporter 
   - job_name: 'node_exporter'
     static_configs:
       - targets: ['node_exporter:9100']
@@ -16,18 +16,14 @@ scrape_configs:
   - job_name: 'portfolio_health_check'
     metrics_path: /probe
     params:
-      module: [http_2xx] # Blackbox module checks for a 200 OK status
+      module: [http_2xx] # Checks for a 200 OK status, fixing the Content-Type error
     static_configs:
-      # The target we want to check (your portfolio app)
       - targets: ['http://portfolio_app:80/'] 
     relabel_configs:
-      # Passes the target URL to the Blackbox Exporter as a parameter
       - source_labels: [__address__]
         target_label: __param_target
-      # Sets the instance label (what you see in Prometheus) to the app's URL
       - source_labels: [__param_target]
         regex: '(.*)'
         target_label: instance
-      # Sets the actual scrape target to the Blackbox Exporter service
       - target_label: __address__
         replacement: 'blackbox_exporter:9115'
