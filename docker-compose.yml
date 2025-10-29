@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # 1. Your React Portfolio Application
   portfolio_app:
     build: . 
     container_name: portfolio_app
@@ -8,23 +9,26 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - prometheus 
+      - prometheus
+      - blackbox_exporter 
 
-  # 2. Node Exporter (Monitors the host) - REMOVED host network mode
+  # 2. Node Exporter (System Monitoring)
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
-    # Removed: network_mode: host
-    # Removed: command: ['--path.rootfs=/host']
-    # Removed: volumes: ['/:/host:ro,rslave']
-    
-    # We will simply monitor the Node Exporter container itself (CPU/Mem of container, which is fine for basic T3 monitoring)
-    # The container will now be on the default Docker network
     restart: always
     ports:
-      - "9100:9100" # Expose the port so Prometheus (ID 1860) can access the metrics
-    
-  # 3. Prometheus Monitoring Server (UNCHANGED)
+      - "9100:9100" 
+      
+  # 3. Blackbox Exporter (HTTP/Health Check Tool)
+  blackbox_exporter:
+    image: prom/blackbox-exporter:latest
+    container_name: blackbox_exporter
+    restart: always
+    ports:
+      - "9115:9115"
+
+  # 4. Prometheus Monitoring Server
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -32,12 +36,16 @@ services:
     ports:
       - "9090:9090"
     volumes:
+      # Mount the separate configuration file
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml 
-      - prometheus_data:/prometheus
+      - prometheus_data:/prometheus 
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - node_exporter
+      - blackbox_exporter
 
-  # 4. Grafana Visualization Dashboard (UNCHANGED)
+  # 5. Grafana Visualization Dashboard
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -52,6 +60,7 @@ services:
     depends_on:
       - prometheus
 
+# Define Volumes for Data Persistence
 volumes:
   prometheus_data: {}
   grafana_data: {}

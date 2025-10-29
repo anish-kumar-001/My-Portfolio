@@ -2,25 +2,32 @@ global:
   scrape_interval: 15s 
 
 scrape_configs:
+  # 1. Scrape Prometheus itself
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
 
-  # 2. Scrape the Node Exporter (Now on Docker Network)
-  - job_name: 'node_exporter_aws_t3'
-    # FIX: Revert to Docker service name since we removed 'network_mode: host'
+  # 2. Scrape the Node Exporter (System Monitoring)
+  - job_name: 'node_exporter'
     static_configs:
       - targets: ['node_exporter:9100']
       
-  # 3. Scrape the portfolio application (HTTP Health Check)
-  - job_name: 'portfolio_site_health'
-    metrics_path: / 
+  # 3. Portfolio Site Health Check (Uses Blackbox Exporter)
+  - job_name: 'portfolio_health_check'
+    metrics_path: /probe
+    params:
+      module: [http_2xx] # Blackbox module checks for a 200 OK status
     static_configs:
-      - targets: ['portfolio_app:80']
-    # FIX: Relabeling rule to allow Prometheus to consider the scrape successful 
-    # even if the Content-Type is text/html (your React page).
+      # The target we want to check (your portfolio app)
+      - targets: ['http://portfolio_app:80/'] 
     relabel_configs:
+      # Passes the target URL to the Blackbox Exporter as a parameter
       - source_labels: [__address__]
-        regex: '.*'
-        replacement: 'true'
-        target_label: scrape_success
+        target_label: __param_target
+      # Sets the instance label (what you see in Prometheus) to the app's URL
+      - source_labels: [__param_target]
+        regex: '(.*)'
+        target_label: instance
+      # Sets the actual scrape target to the Blackbox Exporter service
+      - target_label: __address__
+        replacement: 'blackbox_exporter:9115'
