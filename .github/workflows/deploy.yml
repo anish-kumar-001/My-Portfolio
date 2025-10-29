@@ -27,7 +27,8 @@ jobs:
         run: npm install
 
       - name: Build React App 
-        run: npm run build
+        # CRITICAL FIX: Set the PUBLIC_URL environment variable for GitHub Pages
+        run: PUBLIC_URL=https://anish-kumar-001.github.io/My-Portfolio/ npm run build
 
       - name: Deploy to GitHub Pages 
         uses: peaceiris/actions-gh-pages@v3

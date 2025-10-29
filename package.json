@@ -2,7 +2,6 @@
   "name": "my-react-portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://anish-kumar-001.github.io/My-Portfolio/",
   "dependencies": {
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
